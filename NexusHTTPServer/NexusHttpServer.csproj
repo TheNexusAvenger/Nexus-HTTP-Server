@@ -6,6 +6,7 @@
     <PackageId>NexusHttpServer</PackageId>
     <Title>Nexus HTTP Server</Title>
     <Authors>TheNexusAvenger</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
