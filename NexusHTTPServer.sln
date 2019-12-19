@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexusHttpServer", "NexusHTTPServer\NexusHttpServer.csproj", "{31E05967-2C15-4C2D-9F95-CF3F35F7CAFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexusHttpServerTests", "NexusHttpServerTests\NexusHttpServerTests.csproj", "{AF8C47F9-14BD-46DE-8047-26FE756E581F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31E05967-2C15-4C2D-9F95-CF3F35F7CAFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31E05967-2C15-4C2D-9F95-CF3F35F7CAFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31E05967-2C15-4C2D-9F95-CF3F35F7CAFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31E05967-2C15-4C2D-9F95-CF3F35F7CAFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF8C47F9-14BD-46DE-8047-26FE756E581F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF8C47F9-14BD-46DE-8047-26FE756E581F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF8C47F9-14BD-46DE-8047-26FE756E581F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF8C47F9-14BD-46DE-8047-26FE756E581F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
