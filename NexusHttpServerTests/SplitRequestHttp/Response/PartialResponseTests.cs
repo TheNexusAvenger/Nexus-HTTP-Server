@@ -31,7 +31,7 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Response
             Assert.AreEqual(CuT1.GetResponseFromId(2).GetResponseData(), "rld!");
             Assert.IsTrue(CuT1.AllResponsesSent());
 
-            // Create the first component under testing.
+            // Create the second component under testing.
             var CuT2 = PartialResponse.SplitResponse(HttpResponse.CreateSuccessResponse("Hello world!!!"),4);
 
             // Assert reading the responses.
@@ -44,6 +44,18 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Response
             Assert.IsFalse(CuT2.AllResponsesSent());
             Assert.AreEqual(CuT2.GetResponseFromId(2).GetResponseData(), "rld!");
             Assert.IsTrue(CuT2.AllResponsesSent());
+            
+            // Create the third component under testing with the built in size value.
+            var CuT3 = PartialResponse.SplitResponse(HttpResponse.CreateSuccessResponse(new string('A',160000)));
+
+            // Assert reading the responses.
+            Assert.AreEqual(CuT3.GetNumberOfResponses(),3);
+            Assert.AreEqual(CuT3.GetResponseFromId(1).GetResponseData().Length,64000);
+            Assert.IsFalse(CuT3.AllResponsesSent());
+            Assert.AreEqual(CuT3.GetResponseFromId(0).GetResponseData().Length,64000);
+            Assert.IsFalse(CuT3.AllResponsesSent());
+            Assert.AreEqual(CuT3.GetResponseFromId(2).GetResponseData().Length,32000);
+            Assert.IsTrue(CuT3.AllResponsesSent());
         }
     }
 }
