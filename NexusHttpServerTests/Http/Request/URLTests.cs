@@ -1,7 +1,7 @@
 ﻿/*
  * TheNexusAvenger
  * 
- * Test the NexusGit.Http.Request.URL class.
+ * Test the Nexus.Http.Server.Test.Http.Request.URL class.
  */
 
 using Nexus.Http.Server.Http.Request;

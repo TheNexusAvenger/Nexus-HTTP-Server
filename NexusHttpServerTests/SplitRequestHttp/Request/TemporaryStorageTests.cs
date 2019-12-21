@@ -1,7 +1,7 @@
 ﻿/*
  * TheNexusAvenger
  * 
- * Test the NexusGit.SplitRequestHttp.TemporaryStorage class.
+ * Test the Nexus.Http.Server.Test.SplitRequestHttp.Request.TemporaryStorage class.
  */
 
 using Nexus.Http.Server.SplitHttp.Request;

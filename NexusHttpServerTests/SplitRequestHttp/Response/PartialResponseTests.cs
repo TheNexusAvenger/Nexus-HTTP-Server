@@ -1,7 +1,7 @@
 ﻿/*
  * TheNexusAvenger
  * 
- * Test the NexusGit.SplitRequestHttp.PartialResponse class.
+ * Test the Nexus.Http.Server.Test.SplitRequestHttp.Response.PartialResponse class.
  */
 
 using Nexus.Http.Server.Http.Response;
