@@ -57,9 +57,15 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Request
             
             // Assert the handlers are correct.
             Assert.AreEqual(CuT.GetRequestHandler(new HttpRequest("GET",URL.FromString("test1"),"","")),handler1);
-            Assert.AreEqual(CuT.GetRequestHandler(new HttpRequest("POST",URL.FromString("test1"),"","")),null);
+            Assert.AreEqual(CuT.GetRequestHandler(new HttpRequest("POST",URL.FromString("test1"),"","test2")),null);
             Assert.AreEqual(CuT.GetRequestHandler(new HttpRequest("GET",URL.FromString("test2"),"","")),handler2);
-            Assert.AreEqual(CuT.GetRequestHandler(new HttpRequest("POST",URL.FromString("test2"),"","")),handler2);
+            Assert.AreEqual(CuT.GetRequestHandler(new HttpRequest("POST",URL.FromString("test2"),"","test2")),handler2);
+            
+            // Assert the responses are correct.
+            Assert.AreEqual(CuT.GetResponse(new HttpRequest("GET",URL.FromString("test1"),"","")).GetStatus(),200);
+            Assert.AreEqual(CuT.GetResponse(new HttpRequest("POST",URL.FromString("test1"),"","test2")).GetStatus(),400);
+            Assert.AreEqual(CuT.GetResponse(new HttpRequest("GET",URL.FromString("test2"),"","")).GetStatus(),200);
+            Assert.AreEqual(CuT.GetResponse(new HttpRequest("POST",URL.FromString("test2"),"","test2")).GetStatus(),200);
         }
     }
 }
