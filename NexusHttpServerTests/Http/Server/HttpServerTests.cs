@@ -102,8 +102,7 @@ namespace Nexus.Http.Server.Test.Http.Server
         public void TestStartingAndStopping()
         {
             // Start the server.
-            var serverTask = Task.Run(() => this.CuT.Start());
-            Assert.IsFalse(serverTask.IsCompleted,"Server is not running; test can't continue.");
+            Task.Run(() => this.CuT.Start());
             
             // Assert starting the server again throws an exception.
             Assert.Throws<WebException>(() => this.CuT.Start());
@@ -134,14 +133,12 @@ namespace Nexus.Http.Server.Test.Http.Server
             
             // Stop the server.
             this.CuT.Stop();
-            Assert.IsTrue(serverTask.IsCompleted,"Server is still running; test can't continue.");
             
             // Assert stopping the server again throws an exception.
             Assert.Throws<WebException>(() => this.CuT.Stop());
             
             // Restart the server and assert the server is up.
-            serverTask = Task.Run(() => this.CuT.Start());
-            Assert.IsFalse(serverTask.IsCompleted,"Server is not running; test can't continue.");
+            Task.Run(() => this.CuT.Start());
             this.AssertGetRequest("",HttpStatusCode.OK,"test1");
             
             // Stop the server.
