@@ -4,6 +4,7 @@
  * Handles "split" requests from a client.
  */
 
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Nexus.Http.Server.Http.Request;
@@ -93,14 +94,9 @@ namespace Nexus.Http.Server.SplitHttp.Request
                     return GetCompleteResponseData(request);
                 }
                 else {
-                    if (requestId == -1)
+                    if (requestId == -1 && packetId == -1)
                     {
                         packetId = 0;
-                    }
-
-                    if (maxPackets == -1)
-                    {
-                        maxPackets = 1;
                     }
                 }
 
@@ -115,7 +111,14 @@ namespace Nexus.Http.Server.SplitHttp.Request
                 }
 
                 // Add the packet to the request.
-                completeRequest.AddPartialPacket(packetId,request.GetBody());
+                try
+                {
+                    completeRequest.AddPartialPacket(packetId, request.GetBody());
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return HttpResponse.CreateBadRequestResponse("Packet index invalid.");
+                }
 
                 // Return the response.
                 if (completeRequest.IsComplete())
@@ -137,9 +140,27 @@ namespace Nexus.Http.Server.SplitHttp.Request
          */
         public HttpResponse GetPartialResponse(int responseId,int packetId)
         {
-            // Get the partial response and response to return.
-            PartialResponse completeResponse = this.UnfinishedResponses.Get(responseId);
-            HttpResponse response = completeResponse.GetResponseFromId(packetId);
+            // Get the partial response to return.
+            PartialResponse completeResponse = null;
+            try
+            {
+                completeResponse = this.UnfinishedResponses.Get(responseId);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return HttpResponse.CreateBadRequestResponse("Response index invalid.");
+            }
+            
+            // Get the packet to return.
+            HttpResponse response = null;
+            try
+            {
+                response = completeResponse.GetResponseFromId(packetId);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return HttpResponse.CreateBadRequestResponse("Packet index invalid.");
+            }
 
             // Remove the response if it has been full read.
             if (completeResponse.AllResponsesSent())
@@ -148,7 +169,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
             }
 
             // Return the response.
-            return CreatePartialResponse(responseId,packetId,completeResponse.GetNumberOfResponses() - 1,response.GetResponseData());
+            return CreatePartialResponse(responseId,packetId,completeResponse.GetNumberOfResponses(),response.GetResponseData());
         }
 
         /*
