@@ -6,6 +6,8 @@
 
 using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using Nexus.Http.Server.Http.Request;
 using Nexus.Http.Server.Http.Response;
@@ -103,6 +105,9 @@ namespace Nexus.Http.Server.Test.Http.Server
             var serverTask = Task.Run(() => this.CuT.Start());
             Assert.IsFalse(serverTask.IsCompleted,"Server is not running; test can't continue.");
             
+            // Assert starting the server again throws an exception.
+            Assert.Throws<WebException>(() => this.CuT.Start());
+            
             // Send GET requests and assert they are correct.
             this.AssertGetRequest("",HttpStatusCode.OK,"test1");
             this.AssertGetRequest("/",HttpStatusCode.OK,"test1");
@@ -129,6 +134,10 @@ namespace Nexus.Http.Server.Test.Http.Server
             
             // Stop the server.
             this.CuT.Stop();
+            Assert.IsTrue(serverTask.IsCompleted,"Server is still running; test can't continue.");
+            
+            // Assert stopping the server again throws an exception.
+            Assert.Throws<WebException>(() => this.CuT.Stop());
             
             // Restart the server and assert the server is up.
             serverTask = Task.Run(() => this.CuT.Start());

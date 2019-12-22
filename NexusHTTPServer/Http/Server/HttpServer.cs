@@ -4,7 +4,11 @@
  * Class that handles accepts client connections.
  */
 
+using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using Nexus.Http.Server.Http.Request;
 
 namespace Nexus.Http.Server.Http.Server
@@ -14,9 +18,12 @@ namespace Nexus.Http.Server.Http.Server
      */
     public class HttpServer
     {
+        private int Port;
         private bool Running;
         private HttpListener Listener;
         private RequestHandler Handlers;
+        private EventWaitHandle ConnectionAcceptedEvent;
+        private EventWaitHandle ConnectionLoopEndedEvent;
 
         /*
          * Creates a server object.
@@ -25,10 +32,9 @@ namespace Nexus.Http.Server.Http.Server
         {
             this.Running = false;
             this.Handlers = requestHandler;
-
-            // Set up the HTTP handler.
-            this.Listener = new HttpListener();
-            this.Listener.Prefixes.Add("http://localhost:" + port + "/");
+            this.Port = port;
+            this.ConnectionAcceptedEvent = new EventWaitHandle(false,EventResetMode.AutoReset);
+            this.ConnectionLoopEndedEvent = new EventWaitHandle(false,EventResetMode.AutoReset);
         }
 
         /*
@@ -46,16 +52,34 @@ namespace Nexus.Http.Server.Http.Server
          */
         public void Start()
         {
-            // Start the listener.
+            // Throw an exception if the server is running.
+            if (this.Running)
+            {
+                throw new WebException("Server is already running. Stop the server before running.");
+            }
+            
+            // Set up the HTTP listener.
             this.Running = true;
+            this.Listener = new HttpListener();
+            this.Listener.Prefixes.Add("http://localhost:" + this.Port + "/");
             this.Listener.Start();
-
-            // Run a loop to accept client connections.
+            
+            // Run a loop to accept client connections until it is closed.
             while (Running)
             {
-                var httpRequestContext = this.Listener.GetContext();
-                this.HandleRequest(httpRequestContext);
+                // Start the context fetching async and wait for it to be completed or to be cancelled.
+                this.Listener.GetContextAsync().ContinueWith((result) =>
+                    {
+                        this.HandleRequest(result.Result);
+                        this.ConnectionAcceptedEvent.Set();
+                    });
+                
+                // Wait for a connection to be accepted or the listener to close.
+                this.ConnectionAcceptedEvent.WaitOne();
             }
+
+            // Signal that the loop ended.
+            this.ConnectionLoopEndedEvent.Set();
         }
 
         /*
@@ -63,8 +87,20 @@ namespace Nexus.Http.Server.Http.Server
          */
         public void Stop()
         {
+            // Throw an exception if the server isn't running.
+            if (!this.Running)
+            {
+                throw new WebException("Server isn't running. Start the server before stopping.");
+            }
+            
+            // Close the listener.
             this.Running = false;
-            this.Listener.Stop();
+            this.Listener.Close();
+            this.Listener = null;
+            
+            // Signal to end the loop and wait for the loop to end.
+            this.ConnectionAcceptedEvent.Set();
+            this.ConnectionLoopEndedEvent.WaitOne();
         }
     }
 }
