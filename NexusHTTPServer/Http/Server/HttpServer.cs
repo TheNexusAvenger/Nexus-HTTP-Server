@@ -4,11 +4,8 @@
  * Class that handles accepts client connections.
  */
 
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
 using Nexus.Http.Server.Http.Request;
 
 namespace Nexus.Http.Server.Http.Server
