@@ -13,7 +13,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
     /*
      * Class for handling split client request handlers.
      */
-    class SplitRequestHandler : RequestHandler
+    public class SplitRequestHandler : RequestHandler
     {
         /*
          * Registers a request handler.
