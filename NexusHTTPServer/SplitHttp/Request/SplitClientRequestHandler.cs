@@ -117,7 +117,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    return HttpResponse.CreateBadRequestResponse("Packet index invalid.");
+                    return CreateInvalidResponse("Packet index invalid");
                 }
 
                 // Return the response.
@@ -130,7 +130,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
                     return this.GetPartialResponse(responseId,0);
                 } else
                 {
-                    return this.CreateIncompleteResponse(requestId);
+                    return CreateIncompleteResponse(requestId);
                 }
             }
         }
@@ -148,7 +148,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
             }
             catch (ArgumentOutOfRangeException)
             {
-                return HttpResponse.CreateBadRequestResponse("Response index invalid.");
+                return CreateInvalidResponse("Response index invalid");
             }
             
             // Get the packet to return.
@@ -159,7 +159,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
             }
             catch (IndexOutOfRangeException)
             {
-                return HttpResponse.CreateBadRequestResponse("Packet index invalid.");
+                return CreateInvalidResponse("Packet index invalid");
             }
 
             // Remove the response if it has been full read.
@@ -175,7 +175,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
         /*
          * Creates an error response.
          */
-        public HttpResponse CreateInvalidResponse(string message)
+        public static HttpResponse CreateInvalidResponse(string message)
         {
             // Create the request.
             var requestData = new Dictionary<string,string>();
@@ -190,7 +190,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
         /*
          * Creates an incomplete response.
          */
-        public HttpResponse CreateIncompleteResponse(int packetId)
+        public static HttpResponse CreateIncompleteResponse(int packetId)
         {
             return HttpResponse.CreateSuccessResponse("{\"status\":\"incomplete\",\"id\":" + packetId + "}");
         }
@@ -198,7 +198,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
         /*
          * Creates a partial response.
          */
-        public HttpResponse CreatePartialResponse(int packetId,int currentPacket,int maxPacket,string message)
+        public static HttpResponse CreatePartialResponse(int packetId,int currentPacket,int maxPacket,string message)
         {
             // Create the request.
             var requestData = new PartialResponseData();

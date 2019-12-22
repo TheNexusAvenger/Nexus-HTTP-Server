@@ -141,12 +141,12 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Request
             response = CuT.GetResponseData(new HttpRequest("GET","/test?requestId=0&packet=3&maxpackets=3",""," 1!"));
             Assert.AreEqual(response.GetStatus(),400);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"Packet index invalid.");
+            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"error\",\"message\":\"Packet index invalid\"}");
             
             response = CuT.GetResponseData(new HttpRequest("GET","/test?requestId=0&packet=-1&maxpackets=3","","!"));
             Assert.AreEqual(response.GetStatus(),400);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"Packet index invalid.");
+            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"error\",\"message\":\"Packet index invalid\"}");
         }
         
         /*
@@ -184,12 +184,12 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Request
             response = CuT.GetResponseData(new HttpRequest("GET","/test?getResponse=true&responseId=1&packet=2","",""));
             Assert.AreEqual(response.GetStatus(),400);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"Response index invalid.");
+            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"error\",\"message\":\"Response index invalid\"}");
             
             response = CuT.GetResponseData(new HttpRequest("GET","/test?getResponse=true&responseId=0&packet=4","",""));
             Assert.AreEqual(response.GetStatus(),400);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"Packet index invalid.");
+            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"error\",\"message\":\"Packet index invalid\"}");
             
             // Assert a packet is removed after being read.
             response = CuT.GetResponseData(new HttpRequest("GET","/test?getResponse=true&responseId=0&packet=2","",""));
@@ -200,7 +200,7 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Request
             response = CuT.GetResponseData(new HttpRequest("GET","/test?getResponse=true&responseId=1&packet=2","",""));
             Assert.AreEqual(response.GetStatus(),400);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"Response index invalid.");
+            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"error\",\"message\":\"Response index invalid\"}");
         }
     }
 }
