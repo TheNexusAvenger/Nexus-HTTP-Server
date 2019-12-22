@@ -78,6 +78,8 @@ namespace Nexus.Http.Server.Test.Http.Request
             Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("GET","/","","")),this.handler1);
             Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("POST","","","")),null);
             Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("POST","/","","")),null);
+            Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("PATCH","","","")),null);
+            Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("PATCH","/","","")),null);
             Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("GET","test1","","")),this.handler1);
             Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("GET","/test1","","")),this.handler1);
             Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("GET","test1/","","")),this.handler1);
@@ -112,6 +114,10 @@ namespace Nexus.Http.Server.Test.Http.Request
             Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("POST","/test1/test4","","")),null);
             Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("POST","test1/test4/","","")),null);
             Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("POST","/test1/test4/","","")),null);
+            Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("PATCH","test1","","")),null);
+            Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("PATCH","/test1","","")),null);
+            Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("PATCH","test1/","","")),null);
+            Assert.AreEqual(this.CuT.GetRequestHandler(new HttpRequest("PATCH","/test1/","","")),null);
         }
         
         /*
@@ -133,6 +139,7 @@ namespace Nexus.Http.Server.Test.Http.Request
             // Assert that invalid responses are correct.
             this.AssertResponse(this.CuT.GetResponse(new HttpRequest("POST","test1/","","")),400,"text/html","Invalid request");
             this.AssertResponse(this.CuT.GetResponse(new HttpRequest("POST","test1/test4/","","")),400,"text/html","Invalid request");
+            this.AssertResponse(this.CuT.GetResponse(new HttpRequest("PATCH","test1/","","")),400,"text/html","Invalid request");
             
             // Assert that valid responses are valid.
             this.AssertResponse(this.CuT.GetResponse(new HttpRequest("GET","","","")),200,"text/html","test1");
