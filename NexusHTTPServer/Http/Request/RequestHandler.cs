@@ -71,7 +71,7 @@ namespace Nexus.Http.Server.Http.Request
         public void RegisterHandler(string requestType,string urlBase,IClientRequestHandler clientRequestHandler)
         {
             requestType = requestType.ToLower();
-            urlBase = urlBase.ToLower();
+            urlBase = URL.FromString(urlBase).GetBaseURL().ToLower();
 
             // Add the request type handler if it doesn't exist.
             if (!this.Handlers.ContainsKey(requestType))
