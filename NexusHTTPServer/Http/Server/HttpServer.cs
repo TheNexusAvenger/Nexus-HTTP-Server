@@ -64,6 +64,7 @@ namespace Nexus.Http.Server.Http.Server
         public void Stop()
         {
             this.Running = false;
+            this.Listener.Stop();
         }
     }
 }
