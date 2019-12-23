@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageVersion>1.0.0</PackageVersion>
     <RootNamespace>Nexus.Http.Server</RootNamespace>
-    <PackageId>NexusHttpServer</PackageId>
     <Title>Nexus HTTP Server</Title>
+    <PackageId>NexusHttpServer</PackageId>
     <Authors>TheNexusAvenger</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Lightweight .NET abstraction for handling HTTP requests.</Description>
+    <PackageProjectUrl>https://github.com/TheNexusAvenger/Nexus-HTTP-Server</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/TheNexusAvenger/Nexus-HTTP-Server/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>
