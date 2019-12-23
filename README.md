@@ -7,7 +7,7 @@ requests from clients.
 
 ## Documentation
 Documentation for the class library can be found on the
-[GitHub pages](https://thenexusavenger.github.io/Nexus-Http-Server)
+[GitHub pages](https://thenexusavenger.github.io/Nexus-HTTP-Server)
 for this project. The [docs folder](docs) can also be used since it has all
 of the markdown files.
 

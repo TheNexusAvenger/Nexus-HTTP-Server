@@ -1,7 +1,7 @@
 site_name: Nexus HTTP Server Documentation
-site_url: https://thenexusavenger.github.io/Nexus-Http-Server
-repo_name: TheNexusAvenger/Nexus-Http-Server
-repo_url: https://github.com/TheNexusAvenger/Nexus-Http-Server
+site_url: https://thenexusavenger.github.io/Nexus-HTTP-Server
+repo_name: TheNexusAvenger/Nexus-HTTP-Server
+repo_url: https://github.com/TheNexusAvenger/Nexus-HTTP-Server
 
 theme:
   name: 'material'
