@@ -1,7 +1,7 @@
 # Nexus HTTP Server
 Nexus HTTP Server is a light-weight .NET HTTP server implementation
 loosely based on concepts of setting up a server in the
-[http://sparkjava.com/](Java Spark Microframework). The goal is to
+[(Java Spark Microframework](http://sparkjava.com/). The goal is to
 provide a very simple class library for abstracting handling HTTP
 requests from clients.
 
