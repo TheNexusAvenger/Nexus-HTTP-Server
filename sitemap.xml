@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-     <loc>https://thenexusavenger.github.io/Nexus-Http-Server/</loc>
+     <loc>https://thenexusavenger.github.io/Nexus-HTTP-Server/</loc>
      <lastmod>2019-12-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://thenexusavenger.github.io/Nexus-Http-Server/getting-started/standard-server/</loc>
+     <loc>https://thenexusavenger.github.io/Nexus-HTTP-Server/getting-started/standard-server/</loc>
      <lastmod>2019-12-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://thenexusavenger.github.io/Nexus-Http-Server/getting-started/split-requests/</loc>
+     <loc>https://thenexusavenger.github.io/Nexus-HTTP-Server/getting-started/split-requests/</loc>
      <lastmod>2019-12-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
