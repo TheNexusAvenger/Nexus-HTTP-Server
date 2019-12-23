@@ -1,0 +1,20 @@
+site_name: Nexus HTTP Server Documentation
+site_url: https://thenexusavenger.github.io/Nexus-HTTP-Server
+repo_name: TheNexusAvenger/Nexus-HTTP-Server
+repo_url: https://github.com/TheNexusAvenger/Nexus-HTTP-Server
+
+theme:
+  name: 'material'
+  palette:
+    primary: 'Blue'
+    accent: 'Light Blue'
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Standard Server: getting-started/standard-server.md
+    - Split Requests: getting-started/split-requests.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
