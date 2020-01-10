@@ -80,8 +80,11 @@ namespace Nexus.Http.Server.Http.Response
             httpResponse.StatusCode = this.Status;
 
             // Send the data.
-            httpResponse.WriteContent(Encoding.UTF8.GetBytes(this.ResponseData));
-            httpResponse.Close();
+            var contentBytes = Encoding.UTF8.GetBytes(this.ResponseData);
+            httpResponse.ContentLength64 = contentBytes.LongLength;
+            var outputStream = httpResponse.OutputStream;
+            outputStream.Write(contentBytes,0,(int) contentBytes.LongLength);
+            outputStream.Close();
         }
     }
 }
