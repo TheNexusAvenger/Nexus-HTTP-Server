@@ -4,6 +4,7 @@
  * Stores the request handlers for the server.
  */
 
+using System;
 using System.Collections.Generic;
 using Nexus.Http.Server.Http.Response;
 
@@ -58,7 +59,16 @@ namespace Nexus.Http.Server.Http.Request
             // If the handler exists, return the response.
             if (handler != null)
             {
-                return handler.GetResponseData(request);
+                try
+                {
+                    return handler.GetResponseData(request);
+                }
+                catch (Exception error)
+                {
+                    var errorMessage = error.GetType().Name + ": " + error.Message + "\n" + error.StackTrace;
+                    Console.WriteLine(errorMessage);
+                    return new HttpResponse(500,"text/html","Server error.\n" +  errorMessage);
+                }
             }
 
             // Return an invalid response error.

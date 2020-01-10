@@ -4,6 +4,7 @@
  * Test the Nexus.Http.Server.Test.Http.Request.RequestHandler class.
  */
 
+using System;
 using Nexus.Http.Server.Http.Request;
 using Nexus.Http.Server.Http.Response;
 using NUnit.Framework;
@@ -38,6 +39,20 @@ namespace Nexus.Http.Server.Test.Http.Request
         }
     }
     
+    /*
+     * Test client request handler that throws exceptions
+     */
+    public class TestClientExceptionRequestHandler : IClientRequestHandler
+    {
+        /*
+         * Returns a response for a given request.
+         */
+        public HttpResponse GetResponseData(HttpRequest request)
+        {
+            throw new NullReferenceException("Test exception");
+        }
+    }
+    
     [TestFixture]
     public class RequestHandlerTests
     {
@@ -46,6 +61,7 @@ namespace Nexus.Http.Server.Test.Http.Request
         private TestClientRequestHandler handler2;
         private TestClientRequestHandler handler3;
         private TestClientRequestHandler handler4;
+        private TestClientExceptionRequestHandler handler5;
         
         
         /*
@@ -59,11 +75,13 @@ namespace Nexus.Http.Server.Test.Http.Request
             this.handler2 = new TestClientRequestHandler(201,"text/html","test2");
             this.handler3 = new TestClientRequestHandler(200,"text/xml","test3");
             this.handler4 = new TestClientRequestHandler(300,"text/json","test4");
+            this.handler5 = new TestClientExceptionRequestHandler();
             this.CuT.RegisterHandler("GET","",this.handler1);
             this.CuT.RegisterHandler("GET","test1/",this.handler1);
             this.CuT.RegisterHandler("GET","/test1/test2",this.handler2);
             this.CuT.RegisterHandler("GET","test1/test3",this.handler3);
             this.CuT.RegisterHandler("POST","test1/test3",this.handler4);
+            this.CuT.RegisterHandler("GET","/test1/error",this.handler5);
         }
 
         
@@ -127,7 +145,10 @@ namespace Nexus.Http.Server.Test.Http.Request
         {
             Assert.AreEqual(response.GetStatus(),responseCode);
             Assert.AreEqual(response.GetMimeType(),mimeType);
-            Assert.AreEqual(response.GetResponseData(),body);
+            if (body != null)
+            {
+                Assert.AreEqual(response.GetResponseData(),body);
+            }
         }
 
         /*
@@ -151,6 +172,13 @@ namespace Nexus.Http.Server.Test.Http.Request
             this.AssertResponse(this.CuT.GetResponse(new HttpRequest("GET","/test1/test3/","","")),200,"text/xml","test3");
             this.AssertResponse(this.CuT.GetResponse(new HttpRequest("POST","/test1/test3","","test5")),300,"text/json","test4test5");
             this.AssertResponse(this.CuT.GetResponse(new HttpRequest("POST","/test1/test3/","","test6")),300,"text/json","test4test6");
+            
+            // Test the server error responses are correct.
+            var errorResponse = this.CuT.GetResponse(new HttpRequest("GET","test1/error","",""));
+            this.AssertResponse(errorResponse,500,"text/html",null);
+            StringAssert.Contains("Server error.",errorResponse.GetResponseData(),"Server error string not contained.");
+            StringAssert.Contains("NullReferenceException: Test exception",errorResponse.GetResponseData(),"Exception not contained.");
+            StringAssert.Contains("",errorResponse.GetResponseData(),"Stack trace not contained.");
         }
     }
 }
