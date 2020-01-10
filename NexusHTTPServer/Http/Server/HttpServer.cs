@@ -6,7 +6,10 @@
 
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using Nexus.Http.Server.Http.Request;
+using HttpListener = WebSocketSharp.Net.HttpListener;
+using HttpListenerContext = WebSocketSharp.Net.HttpListenerContext;
 
 namespace Nexus.Http.Server.Http.Server
 {
@@ -58,18 +61,19 @@ namespace Nexus.Http.Server.Http.Server
             // Set up the HTTP listener.
             this.Running = true;
             this.Listener = new HttpListener();
-            this.Listener.Prefixes.Add("http://localhost:" + this.Port + "/");
+            this.Listener.Prefixes.Add("http://*:" + this.Port + "/");
             this.Listener.Start();
             
             // Run a loop to accept client connections until it is closed.
             while (Running)
             {
                 // Start the context fetching async and wait for it to be completed or to be cancelled.
-                this.Listener.GetContextAsync().ContinueWith((result) =>
-                    {
-                        this.HandleRequest(result.Result);
-                        this.ConnectionAcceptedEvent.Set();
-                    });
+                var task = Task.Run(() => this.Listener.GetContext());
+                task.ContinueWith((result) =>
+                {
+                    this.HandleRequest(result.Result);
+                    this.ConnectionAcceptedEvent.Set();
+                });
                 
                 // Wait for a connection to be accepted or the listener to close.
                 this.ConnectionAcceptedEvent.WaitOne();
@@ -92,7 +96,8 @@ namespace Nexus.Http.Server.Http.Server
             
             // Close the listener.
             this.Running = false;
-            this.Listener.Close();
+            this.Listener.Prefixes.Remove("http://*:" + this.Port + "/");
+            this.Listener.Stop();
             this.Listener = null;
             
             // Signal to end the loop and wait for the loop to end.

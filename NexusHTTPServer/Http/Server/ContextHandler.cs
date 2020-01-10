@@ -5,7 +5,7 @@
  */
 
 using System.IO;
-using System.Net;
+using WebSocketSharp.Net;
 using System.Threading;
 using Nexus.Http.Server.Http.Request;
 

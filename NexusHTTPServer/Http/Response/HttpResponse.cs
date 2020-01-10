@@ -4,9 +4,9 @@
  * Sends responses back to the client.
  */
 
-using System.IO;
-using System.Net;
+using WebSocketSharp.Net;
 using System.Text;
+using WebSocketSharp;
 
 namespace Nexus.Http.Server.Http.Response
 {
@@ -80,11 +80,8 @@ namespace Nexus.Http.Server.Http.Response
             httpResponse.StatusCode = this.Status;
 
             // Send the data.
-            var writer = new StreamWriter(httpResponse.OutputStream);
-            writer.Write(this.ResponseData);
-            writer.Flush();
-            writer.Close();
-            httpResponse.OutputStream.Close();
+            httpResponse.WriteContent(Encoding.UTF8.GetBytes(this.ResponseData));
+            httpResponse.Close();
         }
     }
 }
