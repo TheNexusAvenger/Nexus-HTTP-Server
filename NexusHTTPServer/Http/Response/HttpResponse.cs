@@ -4,9 +4,9 @@
  * Sends responses back to the client.
  */
 
+using System.IO;
 using WebSocketSharp.Net;
 using System.Text;
-using WebSocketSharp;
 
 namespace Nexus.Http.Server.Http.Response
 {
@@ -68,6 +68,24 @@ namespace Nexus.Http.Server.Http.Response
         {
             return this.ResponseData;
         }
+        
+        /*
+         * Writes the content to a stream.
+         */
+        public void WriteContents(Stream outputStream)
+        {
+            try
+            {
+                var contentBytes = Encoding.UTF8.GetBytes(this.ResponseData);
+                outputStream.Write(contentBytes,0,(int) contentBytes.LongLength);
+                outputStream.Flush();
+                outputStream.Close();
+            }
+            catch (IOException exception)
+            {
+                
+            }
+        }
 
         /*
          * Sends a response to the client.
@@ -80,11 +98,8 @@ namespace Nexus.Http.Server.Http.Response
             httpResponse.StatusCode = this.Status;
 
             // Send the data.
-            var contentBytes = Encoding.UTF8.GetBytes(this.ResponseData);
-            httpResponse.ContentLength64 = contentBytes.LongLength;
-            var outputStream = httpResponse.OutputStream;
-            outputStream.Write(contentBytes,0,(int) contentBytes.LongLength);
-            outputStream.Close();
+            httpResponse.ContentLength64 = Encoding.UTF8.GetBytes(this.ResponseData).LongLength;
+            this.WriteContents(httpResponse.OutputStream);
         }
     }
 }
