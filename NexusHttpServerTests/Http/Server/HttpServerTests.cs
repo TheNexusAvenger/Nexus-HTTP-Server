@@ -6,8 +6,6 @@
 
 using System.Net;
 using System.Net.Http;
-using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using Nexus.Http.Server.Http.Request;
 using Nexus.Http.Server.Http.Response;
@@ -50,7 +48,6 @@ namespace Nexus.Http.Server.Test.Http.Server
         public const int TEST_PORT = 20003;
         private HttpServer CuT;
         private RequestHandler requestHandler;
-        private HttpClient httpClient;
         
         /*
          * Sets up the components under testing for the test.
@@ -65,7 +62,6 @@ namespace Nexus.Http.Server.Test.Http.Server
             this.requestHandler.RegisterHandler("GET","test1/test3",new TestClientRequestHandler(200,"text/xml","test3"));
             this.requestHandler.RegisterHandler("POST","test1/test3",new TestClientRequestHandler(404,"text/json","test4"));
             this.CuT = new HttpServer(TEST_PORT,this.requestHandler);
-            this.httpClient = new HttpClient();
         }
         
         /*
@@ -74,7 +70,7 @@ namespace Nexus.Http.Server.Test.Http.Server
         private void AssertGetRequest(string endpoint,HttpStatusCode responseCode,string responseContents)
         {
             // Get the response.
-            var response = this.httpClient.GetAsync("http://localhost:" + TEST_PORT + endpoint).Result;
+            var response = new HttpClient().GetAsync("http://localhost:" + TEST_PORT + endpoint).Result;
             
             // Assert that the response is correct.
             Assert.AreEqual(response.StatusCode,responseCode);
@@ -87,7 +83,7 @@ namespace Nexus.Http.Server.Test.Http.Server
         private void AssertPostRequest(string endpoint,string requestBody,HttpStatusCode responseCode,string responseContents)
         {
             // Get the response.
-            var response = this.httpClient.PostAsync("http://localhost:" + TEST_PORT + endpoint,new StringContent(requestBody)).Result;
+            var response = new HttpClient().PostAsync("http://localhost:" + TEST_PORT + endpoint,new StringContent(requestBody)).Result;
             
             // Assert that the response is correct.
             Assert.AreEqual(response.StatusCode,responseCode);
