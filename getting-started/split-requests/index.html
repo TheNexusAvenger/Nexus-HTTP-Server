@@ -34,7 +34,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.3">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
     
     
       
@@ -42,7 +42,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.30686662.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
       
         <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
@@ -53,12 +53,12 @@
       
     
     
-      <script src="../../assets/javascripts/modernizr.74668098.js"></script>
+      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
     
     
       
         <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
@@ -435,8 +435,8 @@ echoed back without modification.</p>
 <p>If no split-request parameters are speicifed, the request
 is treated as non-split and the response is sent back
 complete.</p>
-<div class="codehilite"><pre><span></span><span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span> <span class="ss">&quot;Test1 Test2 Test3&quot;</span>
-     <span class="n">HTTP</span> <span class="mi">200</span> <span class="ss">&quot;Test1 Test2 Test3&quot;</span>
+<div class="codehilite"><pre><span></span><span class="err">POST http://localhost:8080 &quot;Test1 Test2 Test3&quot;</span>
+<span class="err">     HTTP 200 &quot;Test1 Test2 Test3&quot;</span>
 </pre></div>
 
 
@@ -464,18 +464,18 @@ arguments can be used:
 - <code>responseId</code> - The response id to read from
 - <code>packet</code> - The packet id to get from the response, starting at 0</p>
 <p>For the example above, the requests would look like the following:</p>
-<div class="codehilite"><pre><span></span><span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span><span class="o">?</span><span class="n">maxPackets</span><span class="o">=</span><span class="mi">3</span> <span class="ss">&quot;Test1 &quot;</span>
-     <span class="n">HTTP</span> <span class="mi">200</span> <span class="ss">&quot;{&quot;</span><span class="n">status</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span><span class="n">incomplete</span><span class="err">\</span><span class="ss">&quot;,\&quot;</span><span class="n">id</span><span class="err">\</span><span class="ss">&quot;:0}&quot;</span>
-<span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span><span class="o">?</span><span class="n">maxPackets</span><span class="o">=</span><span class="mi">3</span><span class="o">&amp;</span><span class="n">packet</span><span class="o">=</span><span class="mi">1</span><span class="o">&amp;</span><span class="n">requestId</span><span class="o">=</span><span class="mi">0</span> <span class="ss">&quot;Test2 &quot;</span>
-     <span class="n">HTTP</span> <span class="mi">200</span> <span class="ss">&quot;{&quot;</span><span class="n">status</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span><span class="n">incomplete</span><span class="err">\</span><span class="ss">&quot;,\&quot;</span><span class="n">id</span><span class="err">\</span><span class="ss">&quot;:0}&quot;</span>
-<span class="n">POST</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span><span class="o">?</span><span class="n">maxPackets</span><span class="o">=</span><span class="mi">3</span><span class="o">&amp;</span><span class="n">packet</span><span class="o">=</span><span class="mi">2</span><span class="o">&amp;</span><span class="n">requestId</span><span class="o">=</span><span class="mi">0</span> <span class="ss">&quot;Test 3&quot;</span>
-     <span class="n">HTTP</span> <span class="mi">200</span> <span class="ss">&quot;{&quot;</span><span class="n">status</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span><span class="n">success</span><span class="err">\</span><span class="ss">&quot;,\&quot;</span><span class="n">id</span><span class="err">\</span><span class="ss">&quot;:0,\&quot;</span><span class="n">currentPacket</span><span class="err">\</span><span class="ss">&quot;:0,\&quot;</span><span class="n">maxPackets</span><span class="err">\</span><span class="ss">&quot;:4 \&quot;</span><span class="n">packet</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span><span class="n">Test1</span><span class="err">\</span><span class="ss">&quot;}&quot;</span>
-<span class="k">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span><span class="o">?</span><span class="n">getResponse</span><span class="o">=</span><span class="k">true</span><span class="o">&amp;</span><span class="n">responseId</span><span class="o">=</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">packet</span><span class="o">=</span><span class="mi">1</span> <span class="ss">&quot;Test 3&quot;</span>
-     <span class="n">HTTP</span> <span class="mi">200</span> <span class="ss">&quot;{&quot;</span><span class="n">status</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span><span class="n">success</span><span class="err">\</span><span class="ss">&quot;,\&quot;</span><span class="n">id</span><span class="err">\</span><span class="ss">&quot;:0,\&quot;</span><span class="n">currentPacket</span><span class="err">\</span><span class="ss">&quot;:1,\&quot;</span><span class="n">maxPackets</span><span class="err">\</span><span class="ss">&quot;:4,\&quot;</span><span class="n">packet</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span> <span class="n">Tes</span><span class="err">\</span><span class="ss">&quot;}&quot;</span>
-<span class="k">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span><span class="o">?</span><span class="n">getResponse</span><span class="o">=</span><span class="k">true</span><span class="o">&amp;</span><span class="n">responseId</span><span class="o">=</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">packet</span><span class="o">=</span><span class="mi">2</span> <span class="ss">&quot;Test 3&quot;</span>
-     <span class="n">HTTP</span> <span class="mi">200</span> <span class="ss">&quot;{&quot;</span><span class="n">status</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span><span class="n">success</span><span class="err">\</span><span class="ss">&quot;,\&quot;</span><span class="n">id</span><span class="err">\</span><span class="ss">&quot;:0,\&quot;</span><span class="n">currentPacket</span><span class="err">\</span><span class="ss">&quot;:2,\&quot;</span><span class="n">maxPackets</span><span class="err">\</span><span class="ss">&quot;:4,\&quot;</span><span class="n">packet</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span><span class="n">t2</span> <span class="n">T</span><span class="err">\</span><span class="ss">&quot;}&quot;</span>
-<span class="k">GET</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span><span class="o">?</span><span class="n">getResponse</span><span class="o">=</span><span class="k">true</span><span class="o">&amp;</span><span class="n">responseId</span><span class="o">=</span><span class="mi">0</span><span class="o">&amp;</span><span class="n">packet</span><span class="o">=</span><span class="mi">3</span> <span class="ss">&quot;Test 3&quot;</span>
-     <span class="n">HTTP</span> <span class="mi">200</span> <span class="ss">&quot;{&quot;</span><span class="n">status</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span><span class="n">success</span><span class="err">\</span><span class="ss">&quot;,\&quot;</span><span class="n">id</span><span class="err">\</span><span class="ss">&quot;:0,\&quot;</span><span class="n">currentPacket</span><span class="err">\</span><span class="ss">&quot;:3,\&quot;</span><span class="n">maxPackets</span><span class="err">\</span><span class="ss">&quot;:4,\&quot;</span><span class="n">packet</span><span class="err">\</span><span class="ss">&quot;:\&quot;</span><span class="n">est3</span><span class="err">\</span><span class="ss">&quot;}&quot;</span>
+<div class="codehilite"><pre><span></span><span class="err">POST http://localhost:8080?maxPackets=3 &quot;Test1 &quot;</span>
+<span class="err">     HTTP 200 &quot;{&quot;status\&quot;:\&quot;incomplete\&quot;,\&quot;id\&quot;:0}&quot;</span>
+<span class="err">POST http://localhost:8080?maxPackets=3&amp;packet=1&amp;requestId=0 &quot;Test2 &quot;</span>
+<span class="err">     HTTP 200 &quot;{&quot;status\&quot;:\&quot;incomplete\&quot;,\&quot;id\&quot;:0}&quot;</span>
+<span class="err">POST http://localhost:8080?maxPackets=3&amp;packet=2&amp;requestId=0 &quot;Test 3&quot;</span>
+<span class="err">     HTTP 200 &quot;{&quot;status\&quot;:\&quot;success\&quot;,\&quot;id\&quot;:0,\&quot;currentPacket\&quot;:0,\&quot;maxPackets\&quot;:4 \&quot;packet\&quot;:\&quot;Test1\&quot;}&quot;</span>
+<span class="err">GET http://localhost:8080?getResponse=true&amp;responseId=0&amp;packet=1 &quot;Test 3&quot;</span>
+<span class="err">     HTTP 200 &quot;{&quot;status\&quot;:\&quot;success\&quot;,\&quot;id\&quot;:0,\&quot;currentPacket\&quot;:1,\&quot;maxPackets\&quot;:4,\&quot;packet\&quot;:\&quot; Tes\&quot;}&quot;</span>
+<span class="err">GET http://localhost:8080?getResponse=true&amp;responseId=0&amp;packet=2 &quot;Test 3&quot;</span>
+<span class="err">     HTTP 200 &quot;{&quot;status\&quot;:\&quot;success\&quot;,\&quot;id\&quot;:0,\&quot;currentPacket\&quot;:2,\&quot;maxPackets\&quot;:4,\&quot;packet\&quot;:\&quot;t2 T\&quot;}&quot;</span>
+<span class="err">GET http://localhost:8080?getResponse=true&amp;responseId=0&amp;packet=3 &quot;Test 3&quot;</span>
+<span class="err">     HTTP 200 &quot;{&quot;status\&quot;:\&quot;success\&quot;,\&quot;id\&quot;:0,\&quot;currentPacket\&quot;:3,\&quot;maxPackets\&quot;:4,\&quot;packet\&quot;:\&quot;est3\&quot;}&quot;</span>
 </pre></div>
 
 
@@ -527,6 +527,7 @@ the <code>GET</code> handlers are added.</p>
 </pre></div>
                 
                   
+                
                 
               
               
@@ -580,7 +581,7 @@ the <code>GET</code> handlers are added.</p>
       
     </div>
     
-      <script src="../../assets/javascripts/application.ac79c3b0.js"></script>
+      <script src="../../assets/javascripts/application.808e90bb.js"></script>
       
       <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
