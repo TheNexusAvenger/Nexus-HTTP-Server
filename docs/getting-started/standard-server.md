@@ -43,7 +43,7 @@ go to `http://localhost:8080`, you will see the message
 While the code above works, it isn't useful since it
 doesn't handle any requests. To make it useful, it has to
 be set up to handle requests. To add a handler, you need to
-provide tthe following:
+provide the following:
 - The HTTP method (`GET`, `POST`, `PATCH`, etc)
 - The relative URL
 - The handler that implements `IClientRequestHandler`
