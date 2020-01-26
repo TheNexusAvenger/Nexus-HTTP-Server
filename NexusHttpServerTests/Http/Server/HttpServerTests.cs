@@ -46,6 +46,7 @@ namespace Nexus.Http.Server.Test.Http.Server
     public class HttpServerTests
     {
         public const int TEST_PORT = 20003;
+        public const int TEST_SECOND_PORT = 20004;
         private HttpServer CuT;
         private RequestHandler requestHandler;
         
@@ -67,10 +68,10 @@ namespace Nexus.Http.Server.Test.Http.Server
         /*
          * Sends an HTTP GET request to the server and asserts the response is correct.
          */
-        private void AssertGetRequest(string endpoint,HttpStatusCode responseCode,string responseContents)
+        private void AssertGetRequest(int port,string endpoint,HttpStatusCode responseCode,string responseContents)
         {
             // Get the response.
-            var response = new HttpClient().GetAsync("http://localhost:" + TEST_PORT + endpoint).Result;
+            var response = new HttpClient().GetAsync("http://localhost:" + port + endpoint).Result;
             
             // Assert that the response is correct.
             Assert.AreEqual(response.StatusCode,responseCode);
@@ -80,10 +81,10 @@ namespace Nexus.Http.Server.Test.Http.Server
         /*
          * Sends an HTTP POST request to the server and asserts the response is correct.
          */
-        private void AssertPostRequest(string endpoint,string requestBody,HttpStatusCode responseCode,string responseContents)
+        private void AssertPostRequest(int port,string endpoint,string requestBody,HttpStatusCode responseCode,string responseContents)
         {
             // Get the response.
-            var response = new HttpClient().PostAsync("http://localhost:" + TEST_PORT + endpoint,new StringContent(requestBody)).Result;
+            var response = new HttpClient().PostAsync("http://localhost:" + port + endpoint,new StringContent(requestBody)).Result;
             
             // Assert that the response is correct.
             Assert.AreEqual(response.StatusCode,responseCode);
@@ -104,28 +105,28 @@ namespace Nexus.Http.Server.Test.Http.Server
             Assert.Throws<WebException>(() => this.CuT.Start());
             
             // Send GET requests and assert they are correct.
-            this.AssertGetRequest("",HttpStatusCode.OK,"test1");
-            this.AssertGetRequest("/",HttpStatusCode.OK,"test1");
-            this.AssertGetRequest("/test1",HttpStatusCode.OK,"test1");
-            this.AssertGetRequest("/test1/",HttpStatusCode.OK,"test1");
-            this.AssertGetRequest("/test1/test2",HttpStatusCode.Created,"test2");
-            this.AssertGetRequest("/test1/test2/",HttpStatusCode.Created,"test2");
-            this.AssertGetRequest("/test1/test3",HttpStatusCode.OK,"test3");
-            this.AssertGetRequest("/test1/test3/",HttpStatusCode.OK,"test3");
-            this.AssertGetRequest("/test1/test4",HttpStatusCode.BadRequest,"Invalid request");
-            this.AssertGetRequest("/test1/test4/",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertGetRequest(TEST_PORT,"",HttpStatusCode.OK,"test1");
+            this.AssertGetRequest(TEST_PORT,"/",HttpStatusCode.OK,"test1");
+            this.AssertGetRequest(TEST_PORT,"/test1",HttpStatusCode.OK,"test1");
+            this.AssertGetRequest(TEST_PORT,"/test1/",HttpStatusCode.OK,"test1");
+            this.AssertGetRequest(TEST_PORT,"/test1/test2",HttpStatusCode.Created,"test2");
+            this.AssertGetRequest(TEST_PORT,"/test1/test2/",HttpStatusCode.Created,"test2");
+            this.AssertGetRequest(TEST_PORT,"/test1/test3",HttpStatusCode.OK,"test3");
+            this.AssertGetRequest(TEST_PORT,"/test1/test3/",HttpStatusCode.OK,"test3");
+            this.AssertGetRequest(TEST_PORT,"/test1/test4",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertGetRequest(TEST_PORT,"/test1/test4/",HttpStatusCode.BadRequest,"Invalid request");
             
             // Send POST requests and assert they are correct.
-            this.AssertPostRequest("","test5",HttpStatusCode.BadRequest,"Invalid request");
-            this.AssertPostRequest("/","test5",HttpStatusCode.BadRequest,"Invalid request");
-            this.AssertPostRequest("/test1","test5",HttpStatusCode.BadRequest,"Invalid request");
-            this.AssertPostRequest("/test1/","test5",HttpStatusCode.BadRequest,"Invalid request");
-            this.AssertPostRequest("/test1/test2","test5",HttpStatusCode.BadRequest,"Invalid request");
-            this.AssertPostRequest("/test1/test2/","test5",HttpStatusCode.BadRequest,"Invalid request");
-            this.AssertPostRequest("/test1/test3","test5",HttpStatusCode.NotFound,"test4test5");
-            this.AssertPostRequest("/test1/test3/","test5",HttpStatusCode.NotFound,"test4test5");
-            this.AssertPostRequest("/test1/test4","test5",HttpStatusCode.BadRequest,"Invalid request");
-            this.AssertPostRequest("/test1/test4/","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_PORT,"","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_PORT,"/","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_PORT,"/test1","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_PORT,"/test1/","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_PORT,"/test1/test2","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_PORT,"/test1/test2/","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_PORT,"/test1/test3","test5",HttpStatusCode.NotFound,"test4test5");
+            this.AssertPostRequest(TEST_PORT,"/test1/test3/","test5",HttpStatusCode.NotFound,"test4test5");
+            this.AssertPostRequest(TEST_PORT,"/test1/test4","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_PORT,"/test1/test4/","test5",HttpStatusCode.BadRequest,"Invalid request");
             
             // Stop the server.
             this.CuT.Stop();
@@ -135,7 +136,48 @@ namespace Nexus.Http.Server.Test.Http.Server
             
             // Restart the server and assert the server is up.
             Task.Run(() => this.CuT.Start());
-            this.AssertGetRequest("",HttpStatusCode.OK,"test1");
+            this.AssertGetRequest(TEST_PORT,"",HttpStatusCode.OK,"test1");
+            
+            // Stop the server.
+            this.CuT.Stop();
+        }
+        
+        /*
+         * Tests starting and stopping the server with multiple prefixes.
+         * This is a functional test that requires ports 20003 and 20004 to be usable.
+         */
+        [Test]
+        public void TestStartingAndStoppingMultiplePrefixes()
+        {
+            // Start the server.
+            this.CuT.AddPrefix("http://localhost:" + TEST_SECOND_PORT + "/");
+            Task.Run(() => this.CuT.Start());
+            
+            // Assert starting the server again throws an exception.
+            Assert.Throws<WebException>(() => this.CuT.Start());
+            
+            // Send GET requests and assert they are correct.
+            this.AssertGetRequest(TEST_PORT,"",HttpStatusCode.OK,"test1");
+            this.AssertGetRequest(TEST_PORT,"/",HttpStatusCode.OK,"test1");
+            this.AssertGetRequest(TEST_SECOND_PORT,"",HttpStatusCode.OK,"test1");
+            this.AssertGetRequest(TEST_SECOND_PORT,"/",HttpStatusCode.OK,"test1");
+            
+            // Send POST requests and assert they are correct.
+            this.AssertPostRequest(TEST_PORT,"","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_PORT,"/","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_SECOND_PORT,"","test5",HttpStatusCode.BadRequest,"Invalid request");
+            this.AssertPostRequest(TEST_SECOND_PORT,"/","test5",HttpStatusCode.BadRequest,"Invalid request");
+            
+            // Stop the server.
+            this.CuT.Stop();
+            
+            // Assert stopping the server again throws an exception.
+            Assert.Throws<WebException>(() => this.CuT.Stop());
+            
+            // Restart the server and assert the server is up.
+            Task.Run(() => this.CuT.Start());
+            this.AssertGetRequest(TEST_PORT,"",HttpStatusCode.OK,"test1");
+            this.AssertGetRequest(TEST_SECOND_PORT,"",HttpStatusCode.OK,"test1");
             
             // Stop the server.
             this.CuT.Stop();

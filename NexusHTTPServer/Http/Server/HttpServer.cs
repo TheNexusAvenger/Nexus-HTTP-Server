@@ -4,6 +4,9 @@
  * Class that handles accepts client connections.
  */
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +21,7 @@ namespace Nexus.Http.Server.Http.Server
      */
     public class HttpServer
     {
-        private int Port;
+        private List<string> Prefixes;
         private bool Running;
         private HttpListener Listener;
         private RequestHandler Handlers;
@@ -28,13 +31,29 @@ namespace Nexus.Http.Server.Http.Server
         /*
          * Creates a server object.
          */
-        public HttpServer(int port,RequestHandler requestHandler)
+        public HttpServer(RequestHandler requestHandler)
         {
+            this.Prefixes = new List<string>();
             this.Running = false;
             this.Handlers = requestHandler;
-            this.Port = port;
             this.ConnectionAcceptedEvent = new EventWaitHandle(false,EventResetMode.AutoReset);
             this.ConnectionLoopEndedEvent = new EventWaitHandle(false,EventResetMode.AutoReset);
+        }
+        
+        /*
+         * Creates a server object.
+         */
+        public HttpServer(int port,RequestHandler requestHandler) : this(requestHandler)
+        {
+            this.AddPrefix("http://*:" + port + "/");
+        }
+
+        /*
+         * Adds a prefix to listen to.
+         */
+        public void AddPrefix(string prefix)
+        {
+            this.Prefixes.Add(prefix);
         }
 
         /*
@@ -61,7 +80,10 @@ namespace Nexus.Http.Server.Http.Server
             // Set up the HTTP listener.
             this.Running = true;
             this.Listener = new HttpListener();
-            this.Listener.Prefixes.Add("http://*:" + this.Port + "/");
+            foreach (var prefix in this.Prefixes)
+            {
+                this.Listener.Prefixes.Add(prefix);
+            }
             this.Listener.Start();
             
             // Run a loop to accept client connections until it is closed.
@@ -96,7 +118,10 @@ namespace Nexus.Http.Server.Http.Server
             
             // Close the listener.
             this.Running = false;
-            this.Listener.Prefixes.Remove("http://*:" + this.Port + "/");
+            foreach (var prefix in this.Listener.Prefixes.ToArray())
+            {
+                this.Listener.Prefixes.Remove(prefix);
+            }
             this.Listener.Stop();
             this.Listener = null;
             
