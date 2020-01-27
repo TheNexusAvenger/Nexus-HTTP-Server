@@ -111,7 +111,7 @@ namespace Nexus.Http.Server.Test.Http.Server
          * Tests starting and stopping the server.
          * This is a functional test that requires port 20003 to be usable.
          */
-        [Test]
+        [Test,Timeout(120000)]
         public void TestStartingAndStopping()
         {
             // Start the server.
@@ -162,7 +162,7 @@ namespace Nexus.Http.Server.Test.Http.Server
          * Tests starting and stopping the server with multiple prefixes.
          * This is a functional test that requires ports 20003 and 20004 to be usable.
          */
-        [Test]
+        [Test,Timeout(120000)]
         public void TestStartingAndStoppingMultiplePrefixes()
         {
             // Start the server.
