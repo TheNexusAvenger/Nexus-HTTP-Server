@@ -40,6 +40,22 @@ namespace Nexus.Http.Server.Test.Http.Response
         }
         
         /*
+         * Tests the AddHeader method.
+         */
+        [Test]
+        public void AddHeader()
+        {
+            // Create the component under testing and stream.
+            var CuT = HttpResponse.CreateSuccessResponse("Test response");
+            CuT.AddHeader("header1","value1");
+            CuT.AddHeader("header2","value2");
+            
+            // Assert the headers are correct.
+            Assert.AreEqual(CuT.GetHeaders()["header1"],"value1");
+            Assert.AreEqual(CuT.GetHeaders()["header2"],"value2");
+        }
+
+        /*
          * Tests the WriteContents method with a stream
          * that throws an IOException.
          */

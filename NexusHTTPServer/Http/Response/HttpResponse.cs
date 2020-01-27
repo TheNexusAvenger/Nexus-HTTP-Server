@@ -4,6 +4,7 @@
  * Sends responses back to the client.
  */
 
+using System.Collections.Generic;
 using System.IO;
 using WebSocketSharp.Net;
 using System.Text;
@@ -18,6 +19,7 @@ namespace Nexus.Http.Server.Http.Response
         private int Status;
         private string MimeType;
         private string ResponseData;
+        private Dictionary<string,string> Headers;
 
         /*
          * Creates a response.
@@ -27,6 +29,7 @@ namespace Nexus.Http.Server.Http.Response
             this.Status = status;
             this.MimeType = mimetype;
             this.ResponseData = responseData;
+            this.Headers = new Dictionary<string,string>();
         }
 
         /*
@@ -67,6 +70,22 @@ namespace Nexus.Http.Server.Http.Response
         public string GetResponseData()
         {
             return this.ResponseData;
+        }
+        
+        /*
+         * Returns the headers of the response.
+         */
+        public Dictionary<string,string> GetHeaders()
+        {
+            return new Dictionary<string, string>(this.Headers);
+        }
+        
+        /*
+         * Adds a header to the response.
+         */
+        public void AddHeader(string name,string value)
+        {
+            this.Headers[name] = value;
         }
         
         /*

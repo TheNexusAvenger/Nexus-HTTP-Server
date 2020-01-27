@@ -51,15 +51,24 @@ namespace Nexus.Http.Server.SplitHttp.Response
             var remainingResponseData = completeResponseData;
             while (remainingResponseData.Length != 0)
             {
+                // Create the response.
+                HttpResponse newResponse = null;
                 if (remainingResponseData.Length <= maxLength)
                 {
-                    splitResponses.Add(new HttpResponse(status,mimeType,remainingResponseData));
+                    newResponse = new HttpResponse(status,mimeType,remainingResponseData);
                     remainingResponseData = "";
                 } else
                 {
-                    splitResponses.Add(new HttpResponse(status,mimeType,remainingResponseData.Substring(0,maxLength)));
+                    newResponse = new HttpResponse(status,mimeType,remainingResponseData.Substring(0,maxLength));
                     remainingResponseData = remainingResponseData.Substring(maxLength);
                 }
+                
+                // Add the headers and add the response object.
+                foreach (var header in response.GetHeaders())
+                {
+                    newResponse.AddHeader(header.Key,header.Value);
+                }
+                splitResponses.Add(newResponse);
             }
 
             // Return the partial response.

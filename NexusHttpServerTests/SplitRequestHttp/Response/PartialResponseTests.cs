@@ -20,15 +20,20 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Response
         public void SplitResponseTest()
         {
             // Create the first component under testing.
-            var CuT1 = PartialResponse.SplitResponse(HttpResponse.CreateSuccessResponse("Hello world!"),4);
-
+            var responseWithHeaders = HttpResponse.CreateSuccessResponse("Hello world!");
+            responseWithHeaders.AddHeader("header1","value1");
+            var CuT1 = PartialResponse.SplitResponse(responseWithHeaders,4);
+            
             // Assert reading the responses.
             Assert.AreEqual(CuT1.GetNumberOfResponses(),3);
             Assert.AreEqual(CuT1.GetResponseFromId(0).GetResponseData(),"Hell");
+            Assert.AreEqual(CuT1.GetResponseFromId(0).GetHeaders()["header1"],"value1");
             Assert.IsFalse(CuT1.AllResponsesSent());
             Assert.AreEqual(CuT1.GetResponseFromId(1).GetResponseData(),"o wo");
+            Assert.AreEqual(CuT1.GetResponseFromId(1).GetHeaders()["header1"],"value1");
             Assert.IsFalse(CuT1.AllResponsesSent());
             Assert.AreEqual(CuT1.GetResponseFromId(2).GetResponseData(), "rld!");
+            Assert.AreEqual(CuT1.GetResponseFromId(2).GetHeaders()["header1"],"value1");
             Assert.IsTrue(CuT1.AllResponsesSent());
 
             // Create the second component under testing.
