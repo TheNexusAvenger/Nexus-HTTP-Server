@@ -51,7 +51,7 @@ namespace Nexus.Http.Server.Http.Request
         /*
          * Returns the response for a request.
          */
-        public HttpResponse GetResponse(HttpRequest request)
+        public virtual HttpResponse GetResponse(HttpRequest request)
         {
             // Get the handler.
             var handler = this.GetRequestHandler(request);
