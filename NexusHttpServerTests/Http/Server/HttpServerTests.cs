@@ -7,7 +7,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
 using Nexus.Http.Server.Http.Request;
 using Nexus.Http.Server.Http.Response;
@@ -44,7 +44,7 @@ namespace Nexus.Http.Server.Test.Http.Server
             Assert.AreEqual(request.GetHeader("customheader"),"CustomValue");
             
             // Create and send the response.
-            var response = new HttpResponse(this.ResponseCode,this.MimeType,this.ResponsePrefix + request.GetBody());
+            var response = new HttpResponse(this.ResponseCode,this.MimeType,this.ResponsePrefix + Encoding.UTF8.GetString(request.GetBody()));
             response.AddHeader("CustomHeader","CustomValue");
             return response;
         }

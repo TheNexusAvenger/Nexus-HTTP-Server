@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using System.Text;
 
 namespace Nexus.Http.Server.Http.Request
 {
@@ -16,19 +17,27 @@ namespace Nexus.Http.Server.Http.Request
         private string Type;
         private URL Target;
         private string Host;
-        private string Body;
+        private byte[] Body;
         private Dictionary<string,string> Headers;
 
         /*
          * Creates a request object.
          */
-        public HttpRequest(string type,URL target,string host,string body)
+        public HttpRequest(string type,URL target,string host,byte[] body)
         {
             this.Type = type;
             this.Target = target;
             this.Host = host;
             this.Body = body;
             this.Headers = new Dictionary<string,string>();
+        }
+
+        /*
+         * Creates a request object.
+         */
+        public HttpRequest(string type,URL target,string host,string body) : this(type,target,host,Encoding.UTF8.GetBytes(body))
+        {
+            
         }
 
         /*
@@ -66,7 +75,7 @@ namespace Nexus.Http.Server.Http.Request
         /*
          * Returns the request body.
          */
-        public string GetBody()
+        public byte[] GetBody()
         {
             return this.Body;
         }

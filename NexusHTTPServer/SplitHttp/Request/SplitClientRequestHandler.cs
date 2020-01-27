@@ -114,7 +114,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
                 // Add the packet to the request.
                 try
                 {
-                    completeRequest.AddPartialPacket(packetId, request.GetBody());
+                    completeRequest.AddPartialPacket(packetId,Encoding.UTF8.GetString(request.GetBody()));
                 }
                 catch (IndexOutOfRangeException)
                 {

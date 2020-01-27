@@ -36,7 +36,7 @@ namespace Nexus.Http.Server.Test.Http.Request
          */
         public HttpResponse GetResponseData(HttpRequest request)
         {
-            return new HttpResponse(this.ResponseCode,this.MimeType,this.ResponsePrefix + request.GetBody());
+            return new HttpResponse(this.ResponseCode,this.MimeType,this.ResponsePrefix + Encoding.UTF8.GetString(request.GetBody()));
         }
     }
     
@@ -148,7 +148,7 @@ namespace Nexus.Http.Server.Test.Http.Request
             Assert.AreEqual(response.GetMimeType(),mimeType);
             if (body != null)
             {
-                Assert.AreEqual(response.GetResponseData(),body);
+                Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),body);
             }
         }
 
