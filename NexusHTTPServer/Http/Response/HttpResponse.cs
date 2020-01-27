@@ -18,18 +18,26 @@ namespace Nexus.Http.Server.Http.Response
     {
         private int Status;
         private string MimeType;
-        private string ResponseData;
+        private byte[] ResponseData;
         private Dictionary<string,string> Headers;
 
         /*
          * Creates a response.
          */
-        public HttpResponse(int status,string mimetype,string responseData)
+        public HttpResponse(int status,string mimetype,byte[] responseData)
         {
             this.Status = status;
             this.MimeType = mimetype;
             this.ResponseData = responseData;
             this.Headers = new Dictionary<string,string>();
+        }
+        
+        /*
+         * Creates a response.
+         */
+        public HttpResponse(int status,string mimetype,string responseData) : this(status,mimetype,Encoding.UTF8.GetBytes(responseData))
+        {
+            
         }
 
         /*
@@ -67,7 +75,7 @@ namespace Nexus.Http.Server.Http.Response
         /*
          * Returns the response data.
          */
-        public string GetResponseData()
+        public byte[] GetResponseData()
         {
             return this.ResponseData;
         }
@@ -95,7 +103,7 @@ namespace Nexus.Http.Server.Http.Response
         {
             try
             {
-                var contentBytes = Encoding.UTF8.GetBytes(this.ResponseData);
+                var contentBytes = this.ResponseData;
                 outputStream.Write(contentBytes,0,(int) contentBytes.LongLength);
                 outputStream.Flush();
                 outputStream.Close();
@@ -123,7 +131,7 @@ namespace Nexus.Http.Server.Http.Response
             }
 
             // Send the data.
-            httpResponse.ContentLength64 = Encoding.UTF8.GetBytes(this.ResponseData).LongLength;
+            httpResponse.ContentLength64 = this.ResponseData.LongLength;
             this.WriteContents(httpResponse.OutputStream);
         }
     }

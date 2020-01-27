@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Text;
 using Nexus.Http.Server.Http.Request;
 using Nexus.Http.Server.Http.Response;
 using NUnit.Framework;
@@ -176,9 +177,9 @@ namespace Nexus.Http.Server.Test.Http.Request
             // Test the server error responses are correct.
             var errorResponse = this.CuT.GetResponse(new HttpRequest("GET","test1/error","",""));
             this.AssertResponse(errorResponse,500,"text/html",null);
-            StringAssert.Contains("Server error.",errorResponse.GetResponseData(),"Server error string not contained.");
-            StringAssert.Contains("NullReferenceException: Test exception",errorResponse.GetResponseData(),"Exception not contained.");
-            StringAssert.Contains("",errorResponse.GetResponseData(),"Stack trace not contained.");
+            StringAssert.Contains("Server error.", Encoding.UTF8.GetString(errorResponse.GetResponseData()),"Server error string not contained.");
+            StringAssert.Contains("NullReferenceException: Test exception",Encoding.UTF8.GetString(errorResponse.GetResponseData()),"Exception not contained.");
+            StringAssert.Contains("",Encoding.UTF8.GetString(errorResponse.GetResponseData()),"Stack trace not contained.");
         }
     }
 }

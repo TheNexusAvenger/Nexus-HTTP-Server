@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Newtonsoft.Json;
 using Nexus.Http.Server.Http.Request;
 using Nexus.Http.Server.Http.Response;
@@ -169,7 +170,7 @@ namespace Nexus.Http.Server.SplitHttp.Request
             }
 
             // Return the response.
-            return CreatePartialResponse(responseId,packetId,completeResponse.GetNumberOfResponses(),response.GetResponseData());
+            return CreatePartialResponse(responseId,packetId,completeResponse.GetNumberOfResponses(),Encoding.UTF8.GetString(response.GetResponseData()));
         }
 
         /*

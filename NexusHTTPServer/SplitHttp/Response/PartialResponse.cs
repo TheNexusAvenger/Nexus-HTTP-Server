@@ -5,6 +5,7 @@
  */
 
 using System.Collections.Generic;
+using System.Text;
 using Nexus.Http.Server.Http.Response;
 
 namespace Nexus.Http.Server.SplitHttp.Response
@@ -44,7 +45,7 @@ namespace Nexus.Http.Server.SplitHttp.Response
             // Get the base response data.
             var status = response.GetStatus();
             var mimeType = response.GetMimeType();
-            var completeResponseData = response.GetResponseData();
+            var completeResponseData = Encoding.UTF8.GetString(response.GetResponseData());
 
             // Split the responses.
             var splitResponses = new List<HttpResponse>();

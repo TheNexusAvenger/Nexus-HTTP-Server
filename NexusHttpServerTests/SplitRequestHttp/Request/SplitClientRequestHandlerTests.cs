@@ -4,6 +4,7 @@
  * Test the Nexus.Http.Server.Test.SplitRequestHttp.Request.SplitClientRequestHandler class.
  */
 
+using System.Text;
 using Nexus.Http.Server.Http.Request;
 using Nexus.Http.Server.Http.Response;
 using Nexus.Http.Server.SplitHttp.Request;
@@ -69,32 +70,32 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Request
             var response = CuT.GetResponseData(new HttpRequest("GET","/test?maxpackets=3","","Tes"));
             Assert.AreEqual(response.GetStatus(),200);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"incomplete\",\"id\":0}");
+            Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),"{\"status\":\"incomplete\",\"id\":0}");
             
             response = CuT.GetResponseData(new HttpRequest("GET","/test?requestId=0&packet=2&maxpackets=3","","et 1"));
             Assert.AreEqual(response.GetStatus(),200);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"incomplete\",\"id\":0}");
+            Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),"{\"status\":\"incomplete\",\"id\":0}");
             
             response = CuT.GetResponseData(new HttpRequest("GET","/test?maxpackets=3","","Tes"));
             Assert.AreEqual(response.GetStatus(),200);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"incomplete\",\"id\":1}");
+            Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),"{\"status\":\"incomplete\",\"id\":1}");
             
             response = CuT.GetResponseData(new HttpRequest("GET","/test?requestId=0&packet=1&maxpackets=3","","t Pack"));
             Assert.AreEqual(response.GetStatus(),200);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"success\",\"id\":0,\"currentPacket\":0,\"maxPackets\":1,\"packet\":\"Test Packet 1\"}");
+            Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),"{\"status\":\"success\",\"id\":0,\"currentPacket\":0,\"maxPackets\":1,\"packet\":\"Test Packet 1\"}");
             
             response = CuT.GetResponseData(new HttpRequest("GET","/test?requestId=1&packet=1&maxpackets=3","","t Pack"));
             Assert.AreEqual(response.GetStatus(),200);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"incomplete\",\"id\":1}");
+            Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),"{\"status\":\"incomplete\",\"id\":1}");
             
             response = CuT.GetResponseData(new HttpRequest("GET","/test?requestId=1&packet=2&maxpackets=3","","et 2"));
             Assert.AreEqual(response.GetStatus(),200);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"success\",\"id\":0,\"currentPacket\":0,\"maxPackets\":1,\"packet\":\"Test Packet 2\"}");
+            Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),"{\"status\":\"success\",\"id\":0,\"currentPacket\":0,\"maxPackets\":1,\"packet\":\"Test Packet 2\"}");
         }
 
         /*
@@ -110,17 +111,17 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Request
             var response = CuT.GetResponseData(new HttpRequest("GET","/test?maxpackets=3&packet=2","","et"));
             Assert.AreEqual(response.GetStatus(),200);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"incomplete\",\"id\":0}");
+            Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),"{\"status\":\"incomplete\",\"id\":0}");
             
             response = CuT.GetResponseData(new HttpRequest("GET","/test?requestId=0&packet=0&maxpackets=3","","Tes"));
             Assert.AreEqual(response.GetStatus(),200);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"incomplete\",\"id\":0}");
+            Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),"{\"status\":\"incomplete\",\"id\":0}");
 
             response = CuT.GetResponseData(new HttpRequest("GET","/test?requestId=0&packet=1&maxpackets=3","","t Pack"));
             Assert.AreEqual(response.GetStatus(),200);
             Assert.AreEqual(response.GetMimeType(),"text/html");
-            Assert.AreEqual(response.GetResponseData(),"{\"status\":\"success\",\"id\":0,\"currentPacket\":0,\"maxPackets\":1,\"packet\":\"Test Packet\"}");
+            Assert.AreEqual(Encoding.UTF8.GetString(response.GetResponseData()),"{\"status\":\"success\",\"id\":0,\"currentPacket\":0,\"maxPackets\":1,\"packet\":\"Test Packet\"}");
         }
         
         /*
