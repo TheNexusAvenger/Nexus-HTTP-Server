@@ -105,10 +105,6 @@ namespace Nexus.Http.Server.Test.Http.Server
             // Assert that the response is correct.
             Assert.AreEqual(response.StatusCode,responseCode);
             Assert.AreEqual(response.Content.ReadAsStringAsync().Result,responseContents);
-            if (responseCode == HttpStatusCode.OK)
-            {
-                Assert.AreEqual(response.Headers.GetValues("CustomHeader").First(),"CustomValue");
-            }
         }
         
         /*
