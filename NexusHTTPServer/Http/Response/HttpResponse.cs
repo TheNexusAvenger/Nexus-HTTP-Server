@@ -115,6 +115,12 @@ namespace Nexus.Http.Server.Http.Response
             var httpResponse = requestContext.Response;
             httpResponse.ContentEncoding = Encoding.UTF8;
             httpResponse.StatusCode = this.Status;
+            
+            // Send the headers.
+            foreach (var header in this.Headers)
+            {
+                httpResponse.Headers.Add(header.Key,header.Value);
+            }
 
             // Send the data.
             httpResponse.ContentLength64 = Encoding.UTF8.GetBytes(this.ResponseData).LongLength;

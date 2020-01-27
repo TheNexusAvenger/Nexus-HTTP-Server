@@ -4,8 +4,10 @@
  * Test the Nexus.Http.Server.Test.Http.Server.HttpServer class.
  */
 
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Nexus.Http.Server.Http.Request;
 using Nexus.Http.Server.Http.Response;
@@ -40,7 +42,11 @@ namespace Nexus.Http.Server.Test.Http.Server
         {
             // Assert the custom header was sent.
             Assert.AreEqual(request.GetHeader("customheader"),"CustomValue");
-            return new HttpResponse(this.ResponseCode,this.MimeType,this.ResponsePrefix + request.GetBody());
+            
+            // Create and send the response.
+            var response = new HttpResponse(this.ResponseCode,this.MimeType,this.ResponsePrefix + request.GetBody());
+            response.AddHeader("CustomHeader","CustomValue");
+            return response;
         }
     }
     
@@ -80,6 +86,10 @@ namespace Nexus.Http.Server.Test.Http.Server
             // Assert that the response is correct.
             Assert.AreEqual(response.StatusCode,responseCode);
             Assert.AreEqual(response.Content.ReadAsStringAsync().Result,responseContents);
+            if (responseCode == HttpStatusCode.OK)
+            {
+                Assert.AreEqual(response.Headers.GetValues("CustomHeader").First(),"CustomValue");
+            }
         }
         
         /*
@@ -95,6 +105,10 @@ namespace Nexus.Http.Server.Test.Http.Server
             // Assert that the response is correct.
             Assert.AreEqual(response.StatusCode,responseCode);
             Assert.AreEqual(response.Content.ReadAsStringAsync().Result,responseContents);
+            if (responseCode == HttpStatusCode.OK)
+            {
+                Assert.AreEqual(response.Headers.GetValues("CustomHeader").First(),"CustomValue");
+            }
         }
         
         /*
