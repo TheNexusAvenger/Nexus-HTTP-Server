@@ -4,6 +4,8 @@
  * Stores information about requests.
  */
 
+using System.Collections.Generic;
+
 namespace Nexus.Http.Server.Http.Request
 {
     /*
@@ -15,6 +17,7 @@ namespace Nexus.Http.Server.Http.Request
         private URL Target;
         private string Host;
         private string Body;
+        private Dictionary<string,string> Headers;
 
         /*
          * Creates a request object.
@@ -25,6 +28,7 @@ namespace Nexus.Http.Server.Http.Request
             this.Target = target;
             this.Host = host;
             this.Body = body;
+            this.Headers = new Dictionary<string,string>();
         }
 
         /*
@@ -65,6 +69,40 @@ namespace Nexus.Http.Server.Http.Request
         public string GetBody()
         {
             return this.Body;
+        }
+        
+        /*
+         * Returns the value of a header.
+         * If it doesn't exist, null is returned.
+         */
+        public string GetHeader(string header)
+        {
+            header = header.ToLower();
+            
+            // Return null if the header doesn't exist.
+            if (!this.Headers.ContainsKey(header))
+            {
+                return null;
+            }
+            
+            // Return the header.
+            return this.Headers[header];
+        }
+        
+        /*
+         * Returns all of the headers of the request.
+         */
+        public Dictionary<string,string> GetHeaders()
+        {
+            return new Dictionary<string,string>(this.Headers);
+        }
+        
+        /*
+         * Adds a header to the request.
+         */
+        public void AddHeader(string name, string value)
+        {
+            this.Headers[name.ToLower()] = value;
         }
     }
 }

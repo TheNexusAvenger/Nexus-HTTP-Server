@@ -21,6 +21,8 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Request
         {
             // Create a partial request and assert it is set up correctly.
             var CuT = new PartialHttpRequest("POST",URL.FromString("/test1?request=test2"),"my.domain",4);
+            CuT.AddHeader("header1","value1");
+            CuT.AddHeader("header2","value2");
             Assert.AreEqual(CuT.IsComplete(),false);
             Assert.AreEqual(CuT.GetBody(),null);
             
@@ -45,6 +47,9 @@ namespace Nexus.Http.Server.Test.SplitRequestHttp.Request
             Assert.AreEqual(response.GetURL().GetBaseURL(),"test1");
             Assert.AreEqual(response.GetURL().GetParameter("request"),"test2");
             Assert.AreEqual(response.GetBody(), "Packet1Packet2Packet3Packet4");
+            Assert.AreEqual(response.GetHeader("header1"),"value1");
+            Assert.AreEqual(response.GetHeader("header2"),"value2");
+            Assert.AreEqual(response.GetHeader("header3"),null);
         }
     }
 }

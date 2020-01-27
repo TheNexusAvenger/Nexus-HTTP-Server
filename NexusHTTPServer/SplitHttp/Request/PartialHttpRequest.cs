@@ -79,7 +79,12 @@ namespace Nexus.Http.Server.SplitHttp.Request
          */
         public HttpRequest ToSingleRequest()
         {
-            return new HttpRequest(this.GetRequestType(),this.GetURL(),this.GetHost(),this.GetBody());
+            var request = new HttpRequest(this.GetRequestType(),this.GetURL(),this.GetHost(),this.GetBody());
+            foreach (var header in this.GetHeaders())
+            {
+                request.AddHeader(header.Key,header.Value);
+            }
+            return request;
         }
     }
 }
