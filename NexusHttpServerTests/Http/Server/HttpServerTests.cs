@@ -38,6 +38,8 @@ namespace Nexus.Http.Server.Test.Http.Server
          */
         public HttpResponse GetResponseData(HttpRequest request)
         {
+            // Assert the custom header was sent.
+            Assert.AreEqual(request.GetHeader("customheader"),"CustomValue");
             return new HttpResponse(this.ResponseCode,this.MimeType,this.ResponsePrefix + request.GetBody());
         }
     }
@@ -71,7 +73,9 @@ namespace Nexus.Http.Server.Test.Http.Server
         private void AssertGetRequest(int port,string endpoint,HttpStatusCode responseCode,string responseContents)
         {
             // Get the response.
-            var response = new HttpClient().GetAsync("http://localhost:" + port + endpoint).Result;
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("CustomHeader","CustomValue");
+            var response = client.GetAsync("http://localhost:" + port + endpoint).Result;
             
             // Assert that the response is correct.
             Assert.AreEqual(response.StatusCode,responseCode);
@@ -84,7 +88,9 @@ namespace Nexus.Http.Server.Test.Http.Server
         private void AssertPostRequest(int port,string endpoint,string requestBody,HttpStatusCode responseCode,string responseContents)
         {
             // Get the response.
-            var response = new HttpClient().PostAsync("http://localhost:" + port + endpoint,new StringContent(requestBody)).Result;
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("CustomHeader","CustomValue");
+            var response = client.PostAsync("http://localhost:" + port + endpoint,new StringContent(requestBody)).Result;
             
             // Assert that the response is correct.
             Assert.AreEqual(response.StatusCode,responseCode);

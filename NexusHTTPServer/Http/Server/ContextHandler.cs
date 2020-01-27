@@ -47,8 +47,15 @@ namespace Nexus.Http.Server.Http.Server
             var body = bodyReader.ReadToEnd();
             bodyReader.Close();
 
+            // Create the request and headers.
+            var requestObject = new HttpRequest(requestType,url,host,body);
+            foreach (var header in request.Headers.AllKeys)
+            {
+                requestObject.AddHeader(header,request.Headers[header]);
+            }
+            
             // Return the request.
-            return new HttpRequest(requestType,url,host,body);
+            return requestObject;
         }
 
         /*
